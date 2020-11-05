@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+    
+    <arg name="output" default="screen"/>
+    <param name="/use_sim_time" value="true"/>
+
+    <include file="$(find turtlebot_testing)/launch/turtlebot_world.launch" />
+    <include file="$(find turtlebot_testing)/launch/ps4.launch" />
+
+    <node pkg="mars_slam" type="mars_slam_node" name="mars_slam_node" output="$(arg output)" > 
+        <rosparam file="$(find mars_slam)/param/turtlebot.yaml" command="load" /> 
+    </node>
+
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find mars_slam)/rviz/turtlebot.rviz"/>
+
+</launch>

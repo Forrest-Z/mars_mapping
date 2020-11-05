@@ -1,0 +1,8 @@
+.vscode/*
+mars_db_comparator/.vscode/*
+mars_slam_db_line_detector/.vscode/*
+mars_slam/.vscode/*
+scan_line_detector/.vscode/*
+occ_line_detection/.vscode/*
+
+

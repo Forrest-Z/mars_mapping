@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+    
+    <arg name="output" default="screen"/>
+    <param name="/use_sim_time" value="true"/>
+
+    <node pkg="mars_slam" type="mars_slam_node" name="mars_slam_node" output="$(arg output)" > 
+        <rosparam file="$(find mars_slam)/param/mp1_3.yaml" command="load" /> 
+    </node>
+
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find mars_slam)/rviz/mp1.rviz"/>
+
+    <node pkg="rosbag" type="play" name="rosbag" 
+          args="--clock /home/ponpon/wow/bag/2020-06-23-13-01-23.bag"/>
+            <!-- 2020-06-23-13-01-23.bag -->
+            <!-- 2020-06-28-14-27-41.bag -->
+</launch>

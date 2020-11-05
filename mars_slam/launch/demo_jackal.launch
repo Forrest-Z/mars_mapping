@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<launch>
+    
+    <arg name="output" default="screen"/>
+    <param name="/use_sim_time" value="true"/>
+
+    <node pkg="mars_slam" type="mars_slam_node" name="mars_slam_node" output="$(arg output)" > 
+        <rosparam file="$(find mars_slam)/param/jackal.yaml" command="load" /> 
+    </node>
+
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find mars_slam)/rviz/jackal.rviz"/>
+
+    <include file="$(find laser_filter_test)/launch/shadow_filter_jackal.launch" />
+    <include file="$(find jackal_tools)/launch/jackal_rtabmap_bag_demo.launch" />
+
+    <node pkg="rosbag" type="play" name="rosbag" 
+          args="--clock -s 30 /media/ponpon/SSD500GB/2019-09-12a-ITRI_dininghall-jackal_d435_2dscan_bag.bag"/>
+
+</launch>

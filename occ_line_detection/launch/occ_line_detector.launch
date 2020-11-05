@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="output" default="screen"/>
+    <!-- <arg name="map_path" default="/home/ponpon/lab_1105_3.yaml"/> -->
+    <arg name="map_path" default="/home/ponpon/hospital_3.yaml"/>
+    <!-- <arg name="map_path" default="/home/ponpon/simpleroom.yaml"/> -->
+    <!-- <arg name="map_path" default="/home/ponpon/catkin_ws/src/hough_testing/map/test2.yaml"/> -->
+
+    <!-- <include file="$(find mars_nav_bring_up)/launch/include/map_manager_server.launch.xml" >
+        <arg name="map_path" default="$(arg map_path)"/>
+        <arg name="open_modifier" default="false"/>
+    </include> -->
+
+    <node pkg="occ_line_detection" type="occ_line_detector" name="occ_line_detector" output="$(arg output)">
+        <param name="omp_max_thread_num" value="12"/>
+        <param name="angle_resolution" value="0.1"/>
+        <param name="r_resolution" value="0.01"/>
+        <param name="angle_window_size" value="20.0"/>
+        <param name="r_window_size" value="1.0"/>
+        <param name="line_threshold" value="30"/>
+
+        <param name="inflate_map" value="true"/>
+        <param name="pub_map" value="false"/>
+    </node>
+
+    <!-- <node pkg="occ_line_detection" type="test_node" name="test_node" output="$(arg output)"/> -->
+        
+        <!-- rviz -->
+    <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find occ_line_detection)/rviz/view.rviz"
+                                             output="$(arg output)"/> -->
+
+</launch>

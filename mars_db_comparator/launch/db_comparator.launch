@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="output" default="screen"/>
+
+    <node pkg="mars_db_comparator" type="db_comparator_node" name="db_comparator_node" output="$(arg output)">
+        <param name="db_file_path" value="/home/ponpon/catkin_ws/bbb.db"/>
+        <param name="lines_file_path" value="/home/ponpon/catkin_ws/bbb.lines"/>
+    </node>
+
+</launch>

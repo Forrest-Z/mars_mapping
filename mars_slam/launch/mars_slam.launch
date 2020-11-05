@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<launch>
+    
+    <arg name="output" default="screen"/>
+    <param name="/use_sim_time" value="true"/>
+
+    <node pkg="mars_slam" type="mars_slam_node" name="mars_slam_node" output="$(arg output)" > 
+        <rosparam file="$(find mars_slam)/param/default.yaml" command="load" /> 
+        <!-- <rosparam file="$(find mars_slam)/param/mp1_2.yaml" command="load" />  -->
+        <!-- <rosparam file="$(find mars_slam)/param/jackal.yaml" command="load" />  -->
+    </node>
+
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find mars_slam)/rviz/mp1.rviz"/>
+    <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find mars_slam)/rviz/jackal.rviz"/> -->
+
+    <!-- <include file="$(find laser_filter_test)/launch/shadow_filter_mp1.launch" /> -->
+
+
+</launch>

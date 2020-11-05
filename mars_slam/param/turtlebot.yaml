@@ -1,0 +1,67 @@
+debug_ : false
+
+omp_max_thread_num : 6
+
+# laser scan
+scan_topic : /scan
+laser_min_range : -1 
+laser_max_range : -1 # -1 for unlimited
+voxel_size : 0.1
+max_laser_points : 200
+
+# odometry input for scan matching initial guess
+use_odom_input : true
+odom_by_tf : true
+odom_frame_id : odom # if odom_by_tf is true, then use tf from odom_frame_id to laserscan frame id
+odom_topic : /odom # if odom_by_tf is false, then use this topic
+robot_frame_id : base_footprint # map will be on the same plane with robot frame 
+published_frame_id : odom # final localization result will be transform to tf from map to published frame 
+transform_tolerance : 0.2   
+transform_offset : 0.2  # for publishing tf in the future
+
+# motion filter
+update_min_dis : 0.02
+update_min_theta : 0.02
+update_min_time : 0.1
+
+# map
+initial_map_size : 100
+map_resolution : 0.025
+change_submap_dis : 2.0
+map_publsih_frequency : 1
+pub_submap : true
+
+# scan matching
+scan_matching :
+
+# icp scanmatcher params
+  icp : 
+    submap_size : 30.0
+    submap_voxel_size : 0.01
+    max_iteration : 100
+    max_correspondence_distance : 0.03
+    transformation_epsilon : 1e-10
+    euclidean_fitness_epsilon : 0.0001
+    update_map_cloud_frequency : 10
+    one_pixel_to_four_points : true
+
+# loop clousre detection    
+loop_closure :
+
+  pub_grid_stack: true
+  inflate_map : true
+  inflate_pixels : 1
+  branch_and_bound_depth : 6
+  detection_frequency: 1.0  
+  search_submap_max_dist : 8.0
+  theta_resolution: 0.5
+  theta_search_window_size: 20
+  min_score: 0.8
+  min_dist: 0.1 #  two loop closure distance must be more than this value
+  long_neighbor_threshold: 5
+  pose_max_update_dist_short: 0.1
+  pose_max_update_dist_long: 1.0
+  compare_min_dis: 0.5
+  min_error_between_two_loop_closure: 0.05
+
+optimization_frequency : 0.1

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="output" default="screen"/>
+
+    <node pkg="mars_slam_db_line_detector" type="db_line_detector_node" 
+          name="db_line_detector_node" output = "$(arg output)">
+        
+    </node>
+
+</launch>
