@@ -3,8 +3,12 @@
 MapManager::MapManager(ros::NodeHandle& nh_):nh(nh_)
 {
     nh.param<std::string>("db_file_path", db_file_path, "");
+    nh.param<double>("scan_map_resolution",scan_map_resolution,0.05);
 
     loadMap(db_file_path);
+
+    scan_map_pub = nh.advertise<nav_msgs::OccupancyGrid>("scan_map",1,true);
+    map_pub = nh.advertise<nav_msgs::OccupancyGrid>("current_map",1,true);
 }
 
 void MapManager::loadMap(const std::string& file_path)
@@ -75,4 +79,86 @@ nav_msgs::OccupancyGridPtr MapManager::readMap(std::ifstream& file)
     }
 
     return new_map;
+}
+
+void MapManager::transferPointCloudToOccMap(const pcl::PointCloud<pcl::PointXYZ>::Ptr& cloud,
+                                                  nav_msgs::OccupancyGridPtr& map)
+{
+    nav_msgs::OccupancyGridPtr map_new(new nav_msgs::OccupancyGrid);
+    map = map_new;
+    setMapInfo(cloud,map);
+    setMapData(cloud,map);
+    scan_map_pub.publish(map);
+}
+
+void MapManager::setMapInfo(const pcl::PointCloud<pcl::PointXYZ>::Ptr& cloud,
+                                   nav_msgs::OccupancyGridPtr& map)
+{
+    MaxMin max_min = findCloudMaxMin(cloud);    
+
+    map->header.frame_id = "map";
+    map->header.stamp = ros::Time();
+    map->info.resolution = scan_map_resolution;
+    tf::poseTFToMsg(tf::Pose::getIdentity(),map->info.origin);
+    map->info.origin.position.x = max_min.min_x - map->info.resolution;
+    map->info.origin.position.y = max_min.min_y - map->info.resolution;  
+    map->info.width  = ceil((max_min.max_x - max_min.min_x)/map->info.resolution) + 2;
+    map->info.height = ceil((max_min.max_y - max_min.min_y)/map->info.resolution) + 2;
+}
+
+MaxMin MapManager::findCloudMaxMin(const pcl::PointCloud<pcl::PointXYZ>::Ptr& cloud)
+{
+    MaxMin max_min;
+    double max_x,max_y,min_x,min_y;
+
+
+    max_x = min_x = cloud->points[0].x;
+    max_y = min_y = cloud->points[0].y;
+
+    for(unsigned int i = 1;i < cloud->points.size();i++)
+    {
+        pcl::PointXYZ pt = cloud->points[i];
+
+        if(pt.x > max_x)
+            max_x = pt.x;
+        if(pt.y > max_y)
+            max_y = pt.y;
+        if(pt.x < min_x)
+            min_x = pt.x;
+        if(pt.y < min_y)
+            min_y = pt.y;
+    }
+
+    max_min.max_x = max_x;
+    max_min.max_y = max_y;
+    max_min.min_x = min_x;
+    max_min.min_y = min_y;
+
+    return max_min;
+}   
+
+
+void MapManager::setMapData(const pcl::PointCloud<pcl::PointXYZ>::Ptr& cloud,
+                                  nav_msgs::OccupancyGridPtr& map)
+{
+    double origin_x = map->info.origin.position.x;
+    double origin_y = map->info.origin.position.y;
+    int w = map->info.width;
+    int h = map->info.height;
+
+    map->data.resize(map->info.width * map->info.height);
+
+    for(unsigned int i = 0;i < cloud->points.size();i++)
+    {
+        pcl::PointXYZ pt = cloud->points[i];
+        int x = floor((pt.x - origin_x)/map->info.resolution);
+        int y = floor((pt.y - origin_y)/map->info.resolution);
+        int index = x + y * w;
+        map->data[index] = 100;
+    }
+}
+
+void MapManager::pubMap(const int& n)
+{
+    map_pub.publish(submaps[n]);
 }

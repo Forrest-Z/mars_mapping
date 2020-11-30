@@ -5,7 +5,7 @@ omp_max_thread_num : 12
 # laser scan
 scan_topic : /scan_filtered #/scan
 laser_min_range : -1 
-laser_max_range : -1 # -1 for unlimited
+laser_max_range : 10 # -1 for unlimited
 voxel_size : 0.1
 max_laser_points : 200
 

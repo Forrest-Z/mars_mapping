@@ -7,6 +7,7 @@
 #include <boost/thread/mutex.hpp>
 #include <ros/ros.h>
 #include <tf/transform_datatypes.h>
+#include <fstream>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include "mars_slam/map/occ_map.h"

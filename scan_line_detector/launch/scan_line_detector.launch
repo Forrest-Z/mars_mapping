@@ -15,7 +15,7 @@
         <param name="robot_frame_id" value="/base_footprint"/>
 
         <!-- map -->
-        <param name="resolution" value="0.05"/> 
+        <param name="resolution" value="0.025"/> 
 
     </node>
 

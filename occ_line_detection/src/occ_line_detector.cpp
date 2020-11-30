@@ -30,6 +30,7 @@ bool OccLineDetector::lineDetection(mars_srvs::DetectLine::Request& req,
                                     mars_srvs::DetectLine::Response& res)
 {
     ROS_INFO_STREAM("Receive map and start to detect line !!");
+    ros::Time t1 = ros::Time::now();
 
     nav_msgs::OccupancyGridPtr map_(new nav_msgs::OccupancyGrid);
 
@@ -63,6 +64,7 @@ bool OccLineDetector::lineDetection(mars_srvs::DetectLine::Request& req,
     hough_line_msgs::Lines lines;
     lines.map_info = map_->info;  
 
+    #pragma omp parallel for
     for(int i = 0;i < height;i++)
     {
         for(int j = 0;j < width;j++)
@@ -150,8 +152,8 @@ bool OccLineDetector::lineDetection(mars_srvs::DetectLine::Request& req,
 
     ROS_INFO_STREAM("Lines Num: "<< lines.lines.size());
 
-
-    ROS_INFO_STREAM("Finish line detection !!");
+    ros::Time t2 = ros::Time::now();
+    ROS_INFO_STREAM("Finish line detection !! "<<t2-t1);
 
     return true;
 }

@@ -149,7 +149,7 @@ void MapManager::showLines()
         lines_marker.ns = std::to_string(team);
         lines_marker.id = i;
 
-        switch (team%2)
+        switch (team%5)
         {
         case 0:
              lines_marker.color = yellow();

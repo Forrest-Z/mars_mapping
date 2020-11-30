@@ -3,7 +3,7 @@
 
     <arg name="output" default="screen"/>
     <!-- <arg name="map_path" default="/home/ponpon/lab_1105_3.yaml"/> -->
-    <arg name="map_path" default="/home/ponpon/hospital_3.yaml"/>
+    <!-- <arg name="map_path" default="/home/ponpon/hospital_3.yaml"/> -->
     <!-- <arg name="map_path" default="/home/ponpon/simpleroom.yaml"/> -->
     <!-- <arg name="map_path" default="/home/ponpon/catkin_ws/src/hough_testing/map/test2.yaml"/> -->
 
@@ -13,14 +13,24 @@
     </include> -->
 
     <node pkg="occ_line_detection" type="occ_line_detector" name="occ_line_detector" output="$(arg output)">
-        <param name="omp_max_thread_num" value="12"/>
-        <param name="angle_resolution" value="0.1"/>
+        <!-- <param name="omp_max_thread_num" value="12"/>
+        <param name="angle_resolution" value="0.5"/>
         <param name="r_resolution" value="0.01"/>
-        <param name="angle_window_size" value="20.0"/>
-        <param name="r_window_size" value="1.0"/>
-        <param name="line_threshold" value="30"/>
+        <param name="angle_window_size" value="10.0"/>
+        <param name="r_window_size" value="0.5"/>
+        <param name="line_threshold" value="50"/>
 
         <param name="inflate_map" value="true"/>
+        <param name="pub_map" value="false"/> -->
+
+        <param name="omp_max_thread_num" value="12"/>
+        <param name="angle_resolution" value="0.5"/>
+        <param name="r_resolution" value="0.05"/>
+        <param name="angle_window_size" value="5.0"/>
+        <param name="r_window_size" value="0.5"/>
+        <param name="line_threshold" value="70"/>
+
+        <param name="inflate_map" value="false"/>
         <param name="pub_map" value="false"/>
     </node>
 

@@ -3,17 +3,18 @@
 
     <arg name="output" default="screen"/>
 
-    <node pkg="occ_line_detection" type="occ_line_detector" name="scan_occ_line_detector" output="$(arg output)">
+
+    <node pkg="occ_line_detection" type="occ_line_detector" name="occ_line_detector" output="$(arg output)">
+
         <!-- <param name="omp_max_thread_num" value="12"/>
         <param name="angle_resolution" value="0.5"/>
         <param name="r_resolution" value="0.05"/>
-        <param name="angle_window_size" value="10.0"/>
+        <param name="angle_window_size" value="5.0"/>
         <param name="r_window_size" value="0.5"/>
-        <param name="line_threshold" value="20"/>
+        <param name="line_threshold" value="200"/>
 
-        <param name="inflate_map" value="false"/>
+        <param name="inflate_map" value="true"/>
         <param name="pub_map" value="false"/> -->
-
         <param name="omp_max_thread_num" value="12"/>
         <param name="angle_resolution" value="0.5"/>
         <param name="r_resolution" value="0.05"/>
