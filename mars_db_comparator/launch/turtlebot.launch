@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="output" default="screen"/>
+
+    <node pkg="mars_db_comparator" type="db_comparator_node" name="db_comparator_node" output="$(arg output)">
+
+        <param name="lines_file_path" value="/home/ponpon/mars_ws/data/hospital_big_2_4m_10m.lines"/>
+
+        <!-- laserscan -->
+        <param name="scan_topic" value="/scan"/>
+        <param name="laser_min_range" value="-1"/>
+        <param name="laser_max_range" value="-1"/>
+        <param name="voxel_size" value="0.001"/>
+        <param name="max_laser_points" value="10000"/>
+        <param name="robot_frame_id" value="/base_footprint"/>
+
+        <!-- line -->
+        <!-- <param name="parallel_threshold" value="0.5"/>
+        <param name="sigma_theta" value="4.0"/>
+        <param name="sigma_dist" value="0.5"/>
+        <param name="rank_size" value="30"/> -->
+        <param name="parallel_threshold" value="0.5"/>
+        <param name="sigma_theta" value="0.2"/>
+        <param name="sigma_dist" value="0.1"/>
+        <param name="rank_size" value="30"/>
+
+        <!-- map -->
+        <!-- <param name="scan_map_resolution" value="0.1"/>    -->
+        <param name="scan_map_resolution" value="0.025"/>   
+    </node>
+
+</launch>

@@ -46,8 +46,10 @@ bool DBComparator::callCompare(std_srvs::Empty::Request& req,std_srvs::Empty::Re
 
 void DBComparator::callDetectLine(const nav_msgs::OccupancyGridPtr& map)
 {
-    ros::Time t1 = ros::Time::now();
-    ros::Duration set_map_time(0.0);
+    double start,mid ,end;
+
+    start = clock();
+    ros::WallTime t1 = ros::WallTime::now();
 
     ros::ServiceClient client = nh->serviceClient<mars_srvs::DetectLine>("/detect_line");
     mars_srvs::DetectLine srv;
@@ -66,33 +68,40 @@ void DBComparator::callDetectLine(const nav_msgs::OccupancyGridPtr& map)
         lines_manager->getLineRelation(srv.response.lines,scan_lines_relation);
 
         std::vector<int> target_submaps = lines_manager->compareLinesRelationsWithDatabase(scan_lines_relation);
-        ros::Time t3 = ros::Time::now();
-        ROS_INFO_STREAM("Line Process: " << t3-t1);
+        ros::WallTime t3 = ros::WallTime::now();
+        mid = clock();
+        ROS_INFO_STREAM("Line Process: " << t3-t1 << " " <<(mid - start)/CLOCKS_PER_SEC);
         // for(auto map:target_submaps)
         //     ROS_INFO_STREAM(map);
 
         // map_manager->pubMap(target_submaps[target_submaps.size()-1]);
-        ros::ServiceClient client = nh->serviceClient<nav_msgs::SetMap>("/mars_global_localization_node/set_map");
-        ros::ServiceClient client2 = nh->serviceClient<std_srvs::Empty>("/global_localization");
+        // ros::ServiceClient client = nh->serviceClient<nav_msgs::SetMap>("/mars_global_localization_node/set_map");
+        // ros::ServiceClient client2 = nh->serviceClient<std_srvs::Empty>("/global_localization");
+        ros::ServiceClient client = nh->serviceClient<mars_srvs::GlobalLocalization>("/global_localization_by_submap");
 
         for(int i = target_submaps.size() - 1;i >= 0;i--){
             ROS_INFO_STREAM(target_submaps[i]);
 
-            ros::Time ta = ros::Time::now();          
-            nav_msgs::SetMap srv1;
-            srv1.request.map = *(map_manager->getMap(target_submaps[i]));
-            client.call(srv1);
-            ros::Time tb = ros::Time::now(); 
-            set_map_time+= tb-ta;
+            // ros::Time ta = ros::Time::now();          
+            // nav_msgs::SetMap srv1;
+            // srv1.request.map = *(map_manager->getMap(target_submaps[i]));
+            // client.call(srv1);
+            // ros::Time tb = ros::Time::now(); 
+            // set_map_time+= tb-ta;
 
-            std_srvs::Empty srv2;
-            if(client2.call(srv2))
+            // std_srvs::Empty srv2;
+            // if(client2.call(srv2))
+            //     break;
+
+            mars_srvs::GlobalLocalization srv;
+            srv.request.submap_serial_num = target_submaps[i];
+            if(client.call(srv))
                 break;
         }
 
-        ros::Time t2 = ros::Time::now();
-        ROS_INFO_STREAM("Total time: " << t2-t1);
-        ROS_INFO_STREAM(set_map_time);
+        ros::WallTime t2 = ros::WallTime::now();
+        end = clock();
+        ROS_INFO_STREAM("Total time: " << t2-t1 << " " << (end - start) / CLOCKS_PER_SEC);
 
     }
 }

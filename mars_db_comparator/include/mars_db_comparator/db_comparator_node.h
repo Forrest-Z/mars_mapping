@@ -1,6 +1,7 @@
 #ifndef DB_COMPARATOR_NODE_H
 #define DB_COMPARATOR_NODE_H
 
+#include <time.h>
 #include <ros/ros.h>
 #include <sensor_msgs/LaserScan.h>
 #include <std_srvs/Empty.h>
@@ -8,6 +9,7 @@
 #include "mars_db_comparator/map_manager.h"
 #include "mars_db_comparator/lines_manager.h"
 #include "mars_db_comparator/laserscan_processor.h"
+#include "mars_srvs/GlobalLocalization.h"
 
 class DBComparator
 {

@@ -13,7 +13,7 @@
     <include file="$(find laser_filter_test)/launch/shadow_filter_mp1.launch" />
 
     <node pkg="rosbag" type="play" name="rosbag" 
-          args=" /home/ponpon/wow/bag/2020-11-03-14-22-04_filter.bag -s 0 -r 1"/>
+          args=" /home/ponpon/wow/bag/2020-10-28-20-34-26.bag -s 0 -r 2"/>
           <!-- 735 1070 1604385259.635291 1604385594.704254-->
           <!-- 2020-10-27-15-26-43.bag -->
           <!-- 2020-10-22-19-03-27.bag -->

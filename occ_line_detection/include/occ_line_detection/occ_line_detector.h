@@ -1,6 +1,7 @@
 #ifndef OCC_LINE_DETECTOR_H
 #define OCC_LINE_DETECTOR_H
 
+#include <time.h>
 #include <omp.h>
 #include <ros/ros.h>
 #include <nav_msgs/SetMap.h>
@@ -28,6 +29,7 @@ private:
     // param
     int omp_max_thread_num;
     double angle_resolution,r_resolution,angle_window_size,r_window_size; 
+    double parellel_threshold,r_window_size_for_parallel;
     int line_threshold;
     bool inflate_map,pub_map;
 };

@@ -6,14 +6,26 @@
 
     <node pkg="occ_line_detection" type="occ_line_detector" name="occ_line_detector" output="$(arg output)">
 
-        <param name="omp_max_thread_num" value="12"/>
-        <param name="angle_resolution" value="0.5"/>
+        <!-- <param name="omp_max_thread_num" value="4"/>
+        <param name="angle_resolution" value="0.1"/>
         <param name="r_resolution" value="0.05"/>
-        <param name="angle_window_size" value="5.0"/>
+        <param name="angle_window_size" value="20.0"/>
         <param name="r_window_size" value="0.5"/>
-        <param name="line_threshold" value="200"/>
+        <param name="line_threshold" value="150"/>
 
-        <param name="inflate_map" value="true"/>
+        <param name="inflate_map" value="false"/>
+        <param name="pub_map" value="false"/> -->
+
+        <param name="omp_max_thread_num" value="12"/>
+        <param name="angle_resolution" value="0.1"/>
+        <param name="r_resolution" value="0.01"/>
+        <param name="parellel_threshold" value="0.5"/>
+        <param name="angle_window_size" value="10.0"/>
+        <param name="r_window_size" value="2.0"/>
+        <param name="r_window_size_for_parallel" value="0.2"/>
+        <param name="line_threshold" value="40"/>
+
+        <param name="inflate_map" value="false"/>
         <param name="pub_map" value="false"/>
     </node>
 

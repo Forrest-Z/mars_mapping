@@ -5,7 +5,7 @@ MapManager::MapManager(ros::NodeHandle& nh_):nh(nh_)
     nh.param<std::string>("db_file_path", db_file_path, "");
     nh.param<double>("scan_map_resolution",scan_map_resolution,0.05);
 
-    loadMap(db_file_path);
+    // loadMap(db_file_path);
 
     scan_map_pub = nh.advertise<nav_msgs::OccupancyGrid>("scan_map",1,true);
     map_pub = nh.advertise<nav_msgs::OccupancyGrid>("current_map",1,true);

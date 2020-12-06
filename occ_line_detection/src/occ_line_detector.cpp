@@ -7,8 +7,10 @@ OccLineDetector::OccLineDetector()
     nh->param<int>("omp_max_thread_num", omp_max_thread_num, 4);
     nh->param<double>("angle_resolution", angle_resolution, 1);
     nh->param<double>("r_resolution", r_resolution, 0.05);
+    nh->param<double>("parellel_threshold", parellel_threshold, 0.5);
     nh->param<double>("angle_window_size", angle_window_size, 2.0);
-    nh->param<double>("r_window_size", r_window_size, 0.3);
+    nh->param<double>("r_window_size", r_window_size, 0.5);
+    nh->param<double>("r_window_size_for_parallel", r_window_size_for_parallel, 0.2);
     nh->param<int>("line_threshold", line_threshold, 2000);
 
     nh->param<bool>("inflate_map", inflate_map, true);
@@ -29,8 +31,11 @@ OccLineDetector::OccLineDetector()
 bool OccLineDetector::lineDetection(mars_srvs::DetectLine::Request& req,
                                     mars_srvs::DetectLine::Response& res)
 {
+    double start,end;
+    start = clock();
+
     ROS_INFO_STREAM("Receive map and start to detect line !!");
-    ros::Time t1 = ros::Time::now();
+    ros::WallTime t1 = ros::WallTime::now();
 
     nav_msgs::OccupancyGridPtr map_(new nav_msgs::OccupancyGrid);
 
@@ -152,26 +157,57 @@ bool OccLineDetector::lineDetection(mars_srvs::DetectLine::Request& req,
 
     ROS_INFO_STREAM("Lines Num: "<< lines.lines.size());
 
-    ros::Time t2 = ros::Time::now();
-    ROS_INFO_STREAM("Finish line detection !! "<<t2-t1);
+    ros::WallTime t2 = ros::WallTime::now();
+    end = clock();
+    ROS_INFO_STREAM("Finish line detection !! "<<t2-t1 << " " << (end-start)/CLOCKS_PER_SEC);
 
     return true;
 }
 
 bool OccLineDetector::checkRepeat(const hough_line_msgs::Line& new_line,hough_line_msgs::Lines& lines)
 {
-    for(int i = 0;i < lines.lines.size();i++)
-        if((fabs(new_line.rho - lines.lines[i].rho) <= r_window_size ||
-            fabs(new_line.rho + lines.lines[i].rho) <= r_window_size) && 
-            (fabs(new_line.angle - lines.lines[i].angle) <= angle_window_size || 
-             180.0 - fabs(new_line.angle - lines.lines[i].angle) <= angle_window_size))
-        {
+    // for(int i = 0;i < lines.lines.size();i++)
+    //     if((fabs(new_line.rho - lines.lines[i].rho) <= r_window_size ||
+    //         fabs(new_line.rho + lines.lines[i].rho) <= r_window_size) && 
+    //         (fabs(new_line.angle - lines.lines[i].angle) <= angle_window_size || 
+    //          180.0 - fabs(new_line.angle - lines.lines[i].angle) <= angle_window_size))
+    //     {
 
-            if(new_line.score > lines.lines[i].score)
-                lines.lines[i] = new_line;
+    //         if(new_line.score > lines.lines[i].score)
+    //             lines.lines[i] = new_line;
             
+    //         return true;
+    //     }
+
+    for(auto& line:lines.lines)
+    {
+        double dtheta = fabs(new_line.angle - line.angle);
+        double dl;
+
+        if(dtheta > 90)
+        {
+            dtheta = 180.0 - dtheta;
+            dl = fabs(new_line.rho + line.rho);
+        }else
+        {   
+            dl = fabs(new_line.rho - line.rho);
+        }
+        
+        bool same = false;
+
+        if(dtheta <= parellel_threshold){   
+            if(dl < r_window_size_for_parallel)
+                same = true;
+        }else if(dtheta <= angle_window_size)
+            if(dl < r_window_size)
+                same = true;
+
+        if(same){
+            if(new_line.score > line.score)
+                line = new_line;
             return true;
         }
+    }
 
     return false;
 }

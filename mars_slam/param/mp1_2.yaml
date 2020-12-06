@@ -27,7 +27,7 @@ update_min_time : 0.2
 # map
 initial_map_size : 100
 map_resolution : 0.025
-change_submap_dis : 2.0
+change_submap_dis : 4.0
 map_publsih_frequency : 1
 pub_submap : true
 
@@ -61,8 +61,8 @@ loop_closure :
   long_neighbor_threshold: 7
   pose_max_update_dist_short: 0.2
   pose_max_update_dist_long: 2.0
-  compare_min_dis: 0.2
-  min_error_between_two_loop_closure: 0.01
+  compare_min_dis: 0.5
+  min_error_between_two_loop_closure: 0.05
 
 optimization_frequency : 0.1
 
