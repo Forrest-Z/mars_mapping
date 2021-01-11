@@ -23,7 +23,7 @@
         <param name="angle_window_size" value="10.0"/>
         <param name="r_window_size" value="2.0"/>
         <param name="r_window_size_for_parallel" value="0.2"/>
-        <param name="line_threshold" value="10"/>
+        <param name="line_threshold" value="15"/>
 
         <param name="inflate_map" value="false"/>
         <param name="pub_map" value="false"/>

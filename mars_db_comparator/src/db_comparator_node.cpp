@@ -46,9 +46,7 @@ bool DBComparator::callCompare(std_srvs::Empty::Request& req,std_srvs::Empty::Re
 
 void DBComparator::callDetectLine(const nav_msgs::OccupancyGridPtr& map)
 {
-    double start,mid ,end;
 
-    start = clock();
     ros::WallTime t1 = ros::WallTime::now();
 
     ros::ServiceClient client = nh->serviceClient<mars_srvs::DetectLine>("/detect_line");
@@ -69,8 +67,8 @@ void DBComparator::callDetectLine(const nav_msgs::OccupancyGridPtr& map)
 
         std::vector<int> target_submaps = lines_manager->compareLinesRelationsWithDatabase(scan_lines_relation);
         ros::WallTime t3 = ros::WallTime::now();
-        mid = clock();
-        ROS_INFO_STREAM("Line Process: " << t3-t1 << " " <<(mid - start)/CLOCKS_PER_SEC);
+
+        ROS_INFO_STREAM("Line Process: " << t3-t1);
         // for(auto map:target_submaps)
         //     ROS_INFO_STREAM(map);
 
@@ -100,8 +98,8 @@ void DBComparator::callDetectLine(const nav_msgs::OccupancyGridPtr& map)
         }
 
         ros::WallTime t2 = ros::WallTime::now();
-        end = clock();
-        ROS_INFO_STREAM("Total time: " << t2-t1 << " " << (end - start) / CLOCKS_PER_SEC);
+
+        ROS_INFO_STREAM("\033[1m\033[33m" << "Total time: " << t2-t1);
 
     }
 }

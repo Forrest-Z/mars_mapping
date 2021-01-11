@@ -6,15 +6,15 @@
     <node pkg="mars_db_comparator" type="db_comparator_node" name="db_comparator_node" output="$(arg output)">
  
         <!-- <param name="lines_file_path" value="/home/ponpon/mars_ws/data/lab_1103_filter.lines"/> -->
-        <param name="lines_file_path" value="/home/ponpon/soter_ws/data/lab_1028_4m.lines"/>
+        <param name="lines_file_path" value="/home/ponpon/mars_ws/data/lab_1028_4m.lines"/>
 
         <!-- laserscan -->
-        <param name="scan_topic" value="/scan"/>
+        <param name="scan_topic" value="/scan_filtered"/>
         <param name="laser_min_range" value="-1"/>
         <param name="laser_max_range" value="-1"/>
         <param name="voxel_size" value="0.001"/>
         <param name="max_laser_points" value="10000"/>
-        <param name="robot_frame_id" value="/base_footprint"/>
+        <param name="robot_frame_id" value="/base_link"/>
 
         <!-- line -->
         <param name="parallel_threshold" value="1.0"/>
